@@ -1,0 +1,61 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "Location": {
+      "type": "string",
+      "metadata": {
+        "Description": "Location of the Virtual network"
+      }
+    },
+    "SubnetName": {
+      "type": "string",
+      "Defaultvalue": "default",
+      "metadata": {
+        "Description": "Name of the subnet"
+      }
+    },
+    "VirtualNetworkName": {
+      "type": "string",
+      "metadata": {
+        "Description": "Name of the virtual network you want to create"
+      }
+    }
+  },
+  "variables": {
+    "VirtualNetworkAddressPrefix": "10.0.0.0/16",
+    "VirtualNetworkSubnetPrefix": "10.0.0.0/16"
+    },
+  "resources": [
+    {
+      "apiVersion": "2016-03-30",
+      "location": "[parameters('Location')]",
+      "name": "[parameters('VirtualNetworkName')]",
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "[variables('VirtualNetworkAddressPrefix')]"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "[parameters('SubnetName')]",
+            "properties": {
+              "addressPrefix": "[variables('VirtualNetworkSubnetPrefix')]"
+            }
+          }
+        ]
+      },
+      "tags": {
+        "displayName": "[parameters('VirtualNetworkName')]"
+      },
+      "type": "Microsoft.Network/virtualNetworks"
+    }
+    ],
+  "outputs": {
+    "resourceID": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Network/virtualNetworks', parameters('VirtualNetworkName'))]"
+    }
+  }
+}
